@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
 import PokemonCard from '../components/PokemonCard';
 import PokemonForm from '../components/PokemonForm';
 
 const API_BASE_URL = 'https://pokeapi.co/api/v2/pokemon';
 
 function HomePage() {
-  const { pokemonsData, addData, rmData, updateData } = useOutletContext();
+  const [pokemonsData, setPokemonsData] = useState([]);
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -14,6 +13,32 @@ function HomePage() {
     () => [...pokemonsData].sort((left, right) => left.id - right.id),
     [pokemonsData],
   );
+
+  const addData = (data) => {
+    setPokemonsData((currentPokemon) => {
+      const alreadyLoaded = currentPokemon.some((pokemon) => pokemon.id === data.id);
+
+      if (alreadyLoaded) {
+        return currentPokemon;
+      }
+
+      return [...currentPokemon, { ...data, shiny: data.shiny ?? false }];
+    });
+  };
+
+  const updateData = (data, shiny) => {
+    setPokemonsData((currentPokemon) =>
+      currentPokemon.map((pokemon) =>
+        pokemon.id === data.id ? { ...pokemon, shiny } : pokemon,
+      ),
+    );
+  };
+
+  const rmData = (data) => {
+    setPokemonsData((currentPokemon) =>
+      currentPokemon.filter((pokemon) => pokemon.id !== data.id),
+    );
+  };
 
   const addCard = async (name, event = null) => {
     event?.preventDefault();
@@ -54,10 +79,10 @@ function HomePage() {
     <section className="page-stack">
       <div className="panel intro-panel">
         <div>
-          <h2>Build a list that persists between routes</h2>
+          <h2>Build a local Pokémon list</h2>
           <p>
-            `useOutletContext` lets this page read the Pokémon state from the layout route
-            instead of re-creating it every time Home remounts.
+            This page owns its own state, so navigating away from Home unmounts the list and the
+            cards load again when you come back.
           </p>
         </div>
         <PokemonForm addCard={addCard} status={status} />

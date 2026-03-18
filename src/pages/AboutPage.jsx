@@ -1,15 +1,15 @@
 function AboutPage() {
   return (
     <section className="panel page-stack">
-      <h2>Why use useOutletContext?</h2>
+      <h2>Why avoid shared outlet state here?</h2>
       <p>
-        This demo keeps the Pokémon list in the layout route so navigating away from Home does
-        not reset the cards.
+        This demo intentionally keeps the Pokémon list local to the home page so you can see how
+        route navigation causes that state to reset.
       </p>
       <ol>
-        <li>The App layout owns the persistent Pokémon state.</li>
-        <li>Home reads that state with `useOutletContext` instead of local state.</li>
-        <li>Card and detail views stay in sync because they use the same shared data.</li>
+        <li>Home owns the Pokémon list with local component state.</li>
+        <li>Navigating away unmounts Home and clears that local data.</li>
+        <li>Returning home starts over with a fresh Pikachu card.</li>
       </ol>
     </section>
   );
