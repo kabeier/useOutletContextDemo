@@ -15,6 +15,12 @@ function PokemonCard({ data, rmData, updateData }) {
     setShiny(nextShinyValue);
   };
 
+  const handleCry = () => {
+    if (data.cries?.latest) {
+      new Audio(data.cries.latest).play().catch(() => {});
+    }
+  };
+
   return (
     <article className="pokemon-card">
       <div className="pokemon-card-header">
@@ -32,6 +38,7 @@ function PokemonCard({ data, rmData, updateData }) {
         <button onClick={handleShine}>
           {shiny ? 'Un-shine' : 'Shine'}
         </button>
+        <button onClick={handleCry} disabled={!data.cries?.latest}>Cry</button>
         <button onClick={() => navigate(`/pokemon/${data.id}`)}>See details</button>
         <button className="danger-button" onClick={() => rmData(data)}>
           Remove
