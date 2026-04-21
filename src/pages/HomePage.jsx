@@ -63,6 +63,9 @@ function HomePage() {
       const data = await response.json();
       addData(data);
       setStatus('success');
+      if (data.cries?.latest) {
+        new Audio(data.cries.latest).play().catch(() => {});
+      }
     } catch (error) {
       setStatus('error');
       setErrorMessage(error.message || 'Something went wrong while loading that Pokémon.');
