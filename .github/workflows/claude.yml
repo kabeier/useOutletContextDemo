@@ -31,9 +31,10 @@ jobs:
           fetch-depth: 1
 
       - name: Project Setup
-        run:
+        run: |
           npm install
-          npm run dev
+          npm run dev &
+          sleep 3
 
       - name: Run Claude Code
         id: claude
